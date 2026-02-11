@@ -64,10 +64,10 @@ export default function PropertyDetailPage() {
 
   if (!property) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
         <div className="text-center">
           <h1 className="text-xl font-bold text-slate-100">Property Not Found</h1>
-          <Link href="/properties" className="mt-4 text-blue-400 hover:text-blue-300">
+          <Link href="/properties" className="mt-4 inline-block text-blue-400 hover:text-blue-300">
             ← Back to Properties
           </Link>
         </div>
@@ -177,14 +177,21 @@ export default function PropertyDetailPage() {
   const activeTenants = tenants.filter((t) => t.status === "active");
   const totalMonthlyRent = activeTenants.reduce((sum, t) => sum + t.rentAmount, 0);
 
+  const ordinalSuffix = (n: number) => {
+    if (n === 1 || n === 21 || n === 31) return "st";
+    if (n === 2 || n === 22) return "nd";
+    if (n === 3 || n === 23) return "rd";
+    return "th";
+  };
+
   return (
     <div className="min-h-screen bg-slate-950">
       <Sidebar />
       
-      <main className="pl-64">
-        <div className="p-8">
+      <main className="pt-14 lg:pl-64 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <Link
               href="/properties"
               className="text-sm text-slate-400 hover:text-slate-200"
@@ -192,17 +199,17 @@ export default function PropertyDetailPage() {
               ← Back to Properties
             </Link>
             
-            <div className="mt-4 flex items-start justify-between">
+            <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-slate-100">{property.name}</h1>
-                <p className="mt-1 text-slate-400">{property.address}</p>
-                <p className="text-sm text-slate-500">
+                <h1 className="text-xl font-bold text-slate-100 sm:text-2xl">{property.name}</h1>
+                <p className="mt-1 text-sm text-slate-400 sm:text-base">{property.address}</p>
+                <p className="text-xs text-slate-500 sm:text-sm">
                   {property.city}, {property.state} {property.zipCode}
                 </p>
               </div>
               <button
                 onClick={handleDeleteProperty}
-                className="rounded-lg border border-red-500/50 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10"
+                className="w-full rounded-lg border border-red-500/50 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10 sm:w-auto"
               >
                 Delete Property
               </button>
@@ -210,34 +217,34 @@ export default function PropertyDetailPage() {
           </div>
 
           {/* Stats */}
-          <div className="mb-8 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Active Tenants</p>
-              <p className="mt-2 text-2xl font-bold text-slate-100">
+          <div className="mb-6 grid grid-cols-3 gap-2 sm:mb-8 sm:gap-4">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 sm:rounded-2xl sm:p-5">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Tenants</p>
+              <p className="mt-1 text-lg font-bold text-slate-100 sm:mt-2 sm:text-2xl">
                 {activeTenants.length}
-                {property.units && <span className="text-lg text-slate-500"> / {property.units}</span>}
+                {property.units && <span className="text-sm text-slate-500 sm:text-lg"> / {property.units}</span>}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Monthly Revenue</p>
-              <p className="mt-2 text-2xl font-bold text-emerald-400">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 sm:rounded-2xl sm:p-5">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Monthly</p>
+              <p className="mt-1 text-lg font-bold text-emerald-400 sm:mt-2 sm:text-2xl">
                 {formatCurrency(totalMonthlyRent)}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Property Type</p>
-              <p className="mt-2 text-2xl font-bold capitalize text-slate-100">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 sm:rounded-2xl sm:p-5">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Type</p>
+              <p className="mt-1 text-lg font-bold capitalize text-slate-100 sm:mt-2 sm:text-2xl">
                 {property.type.replace("_", " ")}
               </p>
             </div>
           </div>
 
           {/* Tenants Section */}
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-100">Tenants</h2>
+          <div className="mb-4 flex items-center justify-between sm:mb-6">
+            <h2 className="text-base font-semibold text-slate-100 sm:text-lg">Tenants</h2>
             <button
               onClick={() => setShowAddTenant(true)}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+              className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-blue-500 sm:px-4 sm:py-2"
             >
               + Add Tenant
             </button>
@@ -245,14 +252,28 @@ export default function PropertyDetailPage() {
 
           {/* Add/Edit Tenant Modal */}
           {(showAddTenant || editingTenant) && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-              <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-950 p-6">
-                <h3 className="text-lg font-semibold text-slate-100">
-                  {editingTenant ? "Edit Tenant" : "Add New Tenant"}
-                </h3>
+            <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:p-4">
+              <div className="max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-slate-800 bg-slate-950 p-4 sm:max-w-lg sm:rounded-2xl sm:p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-slate-100">
+                    {editingTenant ? "Edit Tenant" : "Add New Tenant"}
+                  </h3>
+                  <button
+                    onClick={() => {
+                      setShowAddTenant(false);
+                      setEditingTenant(null);
+                      resetTenantForm();
+                    }}
+                    className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
                 
-                <form onSubmit={editingTenant ? handleUpdateTenant : handleAddTenant} className="mt-4 space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
+                <form onSubmit={editingTenant ? handleUpdateTenant : handleAddTenant} className="space-y-4">
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
                       <label className="mb-1 block text-sm text-slate-400">Name *</label>
                       <input
@@ -260,7 +281,7 @@ export default function PropertyDetailPage() {
                         required
                         value={tenantForm.name}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, name: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -270,12 +291,12 @@ export default function PropertyDetailPage() {
                         value={tenantForm.unit}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, unit: e.target.value }))}
                         placeholder="e.g., 2A"
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
 
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
                       <label className="mb-1 block text-sm text-slate-400">Email *</label>
                       <input
@@ -283,7 +304,7 @@ export default function PropertyDetailPage() {
                         required
                         value={tenantForm.email}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, email: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -293,12 +314,12 @@ export default function PropertyDetailPage() {
                         required
                         value={tenantForm.phone}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, phone: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
 
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
                       <label className="mb-1 block text-sm text-slate-400">Monthly Rent *</label>
                       <input
@@ -307,7 +328,7 @@ export default function PropertyDetailPage() {
                         min="0"
                         value={tenantForm.rentAmount}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, rentAmount: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -315,18 +336,18 @@ export default function PropertyDetailPage() {
                       <select
                         value={tenantForm.rentDueDay}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, rentDueDay: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       >
                         {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
                           <option key={day} value={day}>
-                            {day}{day === 1 ? "st" : day === 2 ? "nd" : day === 3 ? "rd" : "th"} of month
+                            {day}{ordinalSuffix(day)}
                           </option>
                         ))}
                       </select>
                     </div>
                   </div>
 
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
                       <label className="mb-1 block text-sm text-slate-400">Lease Start *</label>
                       <input
@@ -334,7 +355,7 @@ export default function PropertyDetailPage() {
                         required
                         value={tenantForm.leaseStart}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, leaseStart: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -344,7 +365,7 @@ export default function PropertyDetailPage() {
                         required
                         value={tenantForm.leaseEnd}
                         onChange={(e) => setTenantForm((prev) => ({ ...prev, leaseEnd: e.target.value }))}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -354,7 +375,7 @@ export default function PropertyDetailPage() {
                     <select
                       value={tenantForm.status}
                       onChange={(e) => setTenantForm((prev) => ({ ...prev, status: e.target.value as Tenant["status"] }))}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                     >
                       <option value="active">Active</option>
                       <option value="late">Late on Payment</option>
@@ -368,14 +389,14 @@ export default function PropertyDetailPage() {
                       rows={2}
                       value={tenantForm.notes}
                       onChange={(e) => setTenantForm((prev) => ({ ...prev, notes: e.target.value }))}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
                     />
                   </div>
 
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex flex-col gap-3 pt-2 sm:flex-row">
                     <button
                       type="submit"
-                      className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+                      className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500 sm:w-auto"
                     >
                       {editingTenant ? "Save Changes" : "Add Tenant"}
                     </button>
@@ -386,7 +407,7 @@ export default function PropertyDetailPage() {
                         setEditingTenant(null);
                         resetTenantForm();
                       }}
-                      className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-600"
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2.5 text-sm text-slate-300 transition hover:border-slate-600 sm:w-auto"
                     >
                       Cancel
                     </button>
@@ -398,21 +419,21 @@ export default function PropertyDetailPage() {
 
           {/* Tenants List */}
           {tenants.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-700 py-12">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700 py-10 sm:rounded-2xl sm:py-12">
               <span className="text-4xl">👥</span>
-              <h3 className="mt-4 text-lg font-medium text-slate-200">No tenants yet</h3>
-              <p className="mt-1 text-sm text-slate-400">Add your first tenant to this property</p>
+              <h3 className="mt-4 text-base font-medium text-slate-200 sm:text-lg">No tenants yet</h3>
+              <p className="mt-1 text-sm text-slate-400">Add your first tenant</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {tenants.map((tenant) => (
                 <div
                   key={tenant.id}
-                  className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5"
+                  className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 sm:rounded-2xl sm:p-5"
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <h3 className="font-semibold text-slate-100">{tenant.name}</h3>
                         {tenant.unit && (
                           <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-400">
@@ -423,43 +444,45 @@ export default function PropertyDetailPage() {
                           {tenant.status}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-slate-400">{tenant.email} • {tenant.phone}</p>
-                      <div className="mt-3 flex flex-wrap gap-4 text-sm">
+                      <p className="mt-1 text-sm text-slate-400">{tenant.email}</p>
+                      <p className="text-sm text-slate-400">{tenant.phone}</p>
+                      
+                      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                         <div>
                           <span className="text-slate-500">Rent: </span>
                           <span className="font-medium text-emerald-400">{formatCurrency(tenant.rentAmount)}/mo</span>
                         </div>
                         <div>
                           <span className="text-slate-500">Due: </span>
-                          <span className="text-slate-300">{tenant.rentDueDay}{tenant.rentDueDay === 1 ? "st" : tenant.rentDueDay === 2 ? "nd" : tenant.rentDueDay === 3 ? "rd" : "th"}</span>
+                          <span className="text-slate-300">{tenant.rentDueDay}{ordinalSuffix(tenant.rentDueDay)}</span>
                         </div>
-                        <div>
-                          <span className="text-slate-500">Lease: </span>
-                          <span className="text-slate-300">{tenant.leaseStart} → {tenant.leaseEnd}</span>
-                        </div>
+                      </div>
+                      <div className="mt-1 text-sm">
+                        <span className="text-slate-500">Lease: </span>
+                        <span className="text-slate-300">{tenant.leaseStart} → {tenant.leaseEnd}</span>
                       </div>
                       
                       {/* Lease Upload */}
-                      <div className="mt-4 flex items-center gap-4">
+                      <div className="mt-4">
                         {tenant.lease ? (
-                          <div className="flex items-center gap-2 rounded-lg bg-slate-800/50 px-3 py-2">
+                          <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/50 px-3 py-2">
                             <span className="text-lg">📄</span>
-                            <div>
-                              <p className="text-sm font-medium text-slate-200">{tenant.lease.fileName}</p>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-medium text-slate-200">{tenant.lease.fileName}</p>
                               <p className="text-xs text-slate-500">
-                                Uploaded {new Date(tenant.lease.uploadedAt).toLocaleDateString()}
+                                {new Date(tenant.lease.uploadedAt).toLocaleDateString()}
                               </p>
                             </div>
                             <a
                               href={tenant.lease.fileData}
                               download={tenant.lease.fileName}
-                              className="ml-2 text-xs text-blue-400 hover:text-blue-300"
+                              className="text-xs text-blue-400 hover:text-blue-300"
                             >
                               Download
                             </a>
                           </div>
                         ) : (
-                          <label className="cursor-pointer rounded-lg border border-dashed border-slate-700 px-4 py-2 text-sm text-slate-400 transition hover:border-slate-600 hover:text-slate-300">
+                          <label className="inline-block cursor-pointer rounded-lg border border-dashed border-slate-700 px-3 py-2 text-sm text-slate-400 transition hover:border-slate-600 hover:text-slate-300">
                             <input
                               type="file"
                               accept=".pdf,.doc,.docx"
@@ -475,16 +498,16 @@ export default function PropertyDetailPage() {
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 border-t border-slate-800/50 pt-3 sm:border-0 sm:pt-0">
                       <button
                         onClick={() => handleEditTenant(tenant)}
-                        className="rounded-lg px-3 py-1.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-slate-200"
+                        className="flex-1 rounded-lg bg-slate-800 px-3 py-1.5 text-sm text-slate-300 transition hover:bg-slate-700 sm:flex-none"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteTenant(tenant.id)}
-                        className="rounded-lg px-3 py-1.5 text-sm text-red-400 transition hover:bg-red-500/10"
+                        className="flex-1 rounded-lg px-3 py-1.5 text-sm text-red-400 transition hover:bg-red-500/10 sm:flex-none"
                       >
                         Remove
                       </button>

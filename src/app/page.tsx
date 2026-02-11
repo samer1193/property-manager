@@ -22,7 +22,7 @@ const formatCurrency = (amount: number) => {
 };
 
 export default function Dashboard() {
-  const { properties, tenants, loading, getStats, getTenantsByProperty } = useData();
+  const { properties, loading, getStats, getTenantsByProperty } = useData();
   const stats = getStats();
 
   if (loading) {
@@ -37,68 +37,68 @@ export default function Dashboard() {
     <div className="min-h-screen bg-slate-950">
       <Sidebar />
       
-      <main className="pl-64">
-        <div className="p-8">
+      <main className="pt-14 lg:pl-64 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-slate-100">Dashboard</h1>
+              <h1 className="text-xl font-bold text-slate-100 sm:text-2xl">Dashboard</h1>
               <p className="mt-1 text-sm text-slate-400">
                 Overview of your property portfolio
               </p>
             </div>
             <Link
               href="/properties/new"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+              className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white transition hover:bg-blue-500 sm:w-auto"
             >
               + Add Property
             </Link>
           </div>
 
           {/* Stats Grid */}
-          <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
+          <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 lg:grid-cols-4">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 sm:rounded-2xl sm:p-5">
               <p className="text-xs uppercase tracking-wide text-slate-500">
-                Total Properties
+                Properties
               </p>
-              <p className="mt-2 text-3xl font-bold text-slate-100">
+              <p className="mt-1 text-2xl font-bold text-slate-100 sm:mt-2 sm:text-3xl">
                 {stats.totalProperties}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 sm:rounded-2xl sm:p-5">
               <p className="text-xs uppercase tracking-wide text-slate-500">
-                Active Tenants
+                Tenants
               </p>
-              <p className="mt-2 text-3xl font-bold text-slate-100">
+              <p className="mt-1 text-2xl font-bold text-slate-100 sm:mt-2 sm:text-3xl">
                 {stats.totalTenants}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 sm:rounded-2xl sm:p-5">
               <p className="text-xs uppercase tracking-wide text-slate-500">
-                Monthly Revenue
+                Monthly
               </p>
-              <p className="mt-2 text-3xl font-bold text-emerald-400">
+              <p className="mt-1 text-xl font-bold text-emerald-400 sm:mt-2 sm:text-3xl">
                 {formatCurrency(stats.totalMonthlyRent)}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5">
+            <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 sm:rounded-2xl sm:p-5">
               <p className="text-xs uppercase tracking-wide text-slate-500">
-                Occupancy Rate
+                Occupancy
               </p>
-              <p className="mt-2 text-3xl font-bold text-slate-100">
+              <p className="mt-1 text-2xl font-bold text-slate-100 sm:mt-2 sm:text-3xl">
                 {stats.occupancyRate.toFixed(0)}%
               </p>
               {stats.latePayments > 0 && (
                 <p className="mt-1 text-xs text-red-400">
-                  {stats.latePayments} late payment{stats.latePayments > 1 ? "s" : ""}
+                  {stats.latePayments} late
                 </p>
               )}
             </div>
           </div>
 
           {/* Properties List */}
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-100">Your Properties</h2>
+          <div className="mb-4 flex items-center justify-between sm:mb-6">
+            <h2 className="text-base font-semibold text-slate-100 sm:text-lg">Your Properties</h2>
             <Link
               href="/properties"
               className="text-sm text-blue-400 hover:text-blue-300"
@@ -108,11 +108,11 @@ export default function Dashboard() {
           </div>
 
           {properties.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-700 py-16">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700 py-12 sm:rounded-2xl sm:py-16">
               <div className="rounded-full bg-slate-800 p-4">
                 <span className="text-4xl">🏠</span>
               </div>
-              <h3 className="mt-4 text-lg font-medium text-slate-200">
+              <h3 className="mt-4 text-base font-medium text-slate-200 sm:text-lg">
                 No properties yet
               </h3>
               <p className="mt-1 text-sm text-slate-400">
@@ -126,7 +126,7 @@ export default function Dashboard() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {properties.slice(0, 6).map((property) => {
                 const propertyTenants = getTenantsByProperty(property.id);
                 const monthlyRent = propertyTenants
@@ -137,28 +137,28 @@ export default function Dashboard() {
                   <Link
                     key={property.id}
                     href={`/properties/${property.id}`}
-                    className="group rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 transition hover:border-slate-700 hover:bg-slate-900"
+                    className="group rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 transition hover:border-slate-700 hover:bg-slate-900 sm:rounded-2xl sm:p-5"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-xl sm:text-2xl">
                           {propertyTypeIcons[property.type] || "🏠"}
                         </span>
-                        <div>
-                          <h3 className="font-semibold text-slate-100 group-hover:text-blue-400 transition">
+                        <div className="min-w-0">
+                          <h3 className="truncate font-semibold text-slate-100 group-hover:text-blue-400 transition">
                             {property.name}
                           </h3>
-                          <p className="text-sm text-slate-400">
+                          <p className="truncate text-sm text-slate-400">
                             {property.city}, {property.state}
                           </p>
                         </div>
                       </div>
-                      <span className="rounded-full bg-slate-800 px-2 py-1 text-xs text-slate-400">
+                      <span className="hidden shrink-0 rounded-full bg-slate-800 px-2 py-1 text-xs text-slate-400 sm:inline">
                         {property.type.replace("_", " ")}
                       </span>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between border-t border-slate-800/50 pt-4">
+                    <div className="mt-3 flex items-center justify-between border-t border-slate-800/50 pt-3 sm:mt-4 sm:pt-4">
                       <div>
                         <p className="text-xs text-slate-500">Tenants</p>
                         <p className="text-sm font-medium text-slate-200">
@@ -167,7 +167,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-slate-500">Monthly Rent</p>
+                        <p className="text-xs text-slate-500">Rent</p>
                         <p className="text-sm font-medium text-emerald-400">
                           {formatCurrency(monthlyRent)}
                         </p>
